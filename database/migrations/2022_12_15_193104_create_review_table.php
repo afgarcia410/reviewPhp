@@ -13,15 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('comentario', function (Blueprint $table) {
+        Schema::create('review', function (Blueprint $table) {
             $table->id();
-            $table->string('message', 200);
+            $table->enum('type', ['Book', 'Movie', 'Record']);
+            $table->string('title', 80);
+            $table->string('review', 500);
             $table->foreignId('iduser');
-            $table->foreignId('idreview');
+            $table->binary('thumbnail');
             $table->foreign('iduser')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('idreview')->references('id')->on('review')->onDelete('cascade');
             $table->timestamps();
         });
+        $sql = 'alter table review change thumbnail thumbnail longblob';
+        DB::statement($sql);
     }
 
     /**
@@ -31,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comentario');
+        Schema::dropIfExists('review');
     }
 };
